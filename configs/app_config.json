@@ -1,0 +1,7 @@
+{
+  "project_name": "AI Summer Lab",
+  "data_dir": "data",
+  "log_level": "INFO",
+  "chunk_size": 500,
+  "top_k": 3
+}
