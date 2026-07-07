@@ -1,0 +1,5 @@
+{
+  "score_columns": ["math", "english", "python"],
+  "grade_a": 85,
+  "grade_b": 70
+}
