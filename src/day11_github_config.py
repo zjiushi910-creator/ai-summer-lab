@@ -2,6 +2,7 @@ import json
 import requests
 from pathlib import Path
 import logging
+from src.models.github_user import GitHubUser
 
 logging.basicConfig(
     level=logging.INFO,
@@ -10,7 +11,6 @@ logging.basicConfig(
 
 root = Path(__file__).resolve().parents[1]
 config_path = root / "configs" / "github_config.json"
-
 
 class GitHubDataAnalyzer:
     def load_config(self):
@@ -23,7 +23,6 @@ class GitHubDataAnalyzer:
         self.base_url = self.config["base_url"]
         self.url = f"{self.base_url}/{self.username}"
         self.data = None
-        self.cleaned_data = None
 
     def get_data(self):
         try:
@@ -32,10 +31,15 @@ class GitHubDataAnalyzer:
         except requests.RequestException as e:
             logging.error(f"请求出错: ,{e}")
 
+    def build_user(self) -> GitHubUser:
+        raw_data = self.data.json()
+        clean_data = {
+            "login": raw_data["login"],
+            "followers": raw_data["followers"],
+            "public_repos": raw_data["public_repos"]
+        }
+        return GitHubUser(**clean_data)
+
     def run(self):
         self.get_data()
-
-a = GitHubDataAnalyzer()
-a.run()
-
-
+        return self.build_user()
