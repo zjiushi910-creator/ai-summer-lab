@@ -1,6 +1,6 @@
 from src.clients.github_client import GitHubClient
 from src.models.github_user import GitHubUser
-from src.models.github_repository import GitHubRepository
+from src.models.github_repository_pydantic import GitHubRepository
 class GitHubService:
     def __init__(self, client: GitHubClient):
         self.client = client
@@ -22,10 +22,11 @@ class GitHubService:
                 "name": repo["name"],
                 "language": repo["language"],
                 "stargazers_count": repo["stargazers_count"],
-                "forks_count": repo["forks_count"]
+                "forks_count": repo["forks_count"],
             }
-            repo_obj = GitHubRepository(**clean_repo)
-            repositories.append(repo_obj)
+
+            repository = GitHubRepository.model_validate(clean_repo)
+            repositories.append(repository)
         return repositories
 
     def get_user(self):
